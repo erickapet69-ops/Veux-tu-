@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Pour toi, Lorie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fbf3ee;
+    --paper-2:#f5e6de;
+    --ink:#4a2f36;
+    --ink-soft:#8a6c72;
+    --rose:#b3495f;
+    --rose-dark:#7e2f40;
+    --gold:#c79a5b;
+    --line: rgba(74,47,54,0.16);
+    --focus: #c79a5b;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Cormorant Garamond', serif;
+    color:var(--ink);
+    overflow:hidden;
+    position:relative;
+    padding:24px;
+    background: linear-gradient(180deg,#241726 0%, #3a2233 30%, #6a3548 55%, #b3603f 78%, #e8a35c 100%);
+    background-size: 100% 100%;
+    transition: background 2.5s ease;
+  }
+  body.dawn{
+    background: linear-gradient(180deg,#3a2233 0%, #6a3548 25%, #b3603f 55%, #e8a35c 78%, #f6cf8e 100%);
+  }
+
+  /* twinkling stars, fade out as it "wakes up" */
+  .stars{
+    position:fixed; inset:0;
+    z-index:0;
+    pointer-events:none;
+    opacity:1;
+    transition: opacity 2s ease;
+  }
+  body.dawn .stars{ opacity:0.25; }
+  .star{
+    position:absolute;
+    width:2px; height:2px;
+    background:#fff;
+    border-radius:50%;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle{ 0%,100%{opacity:.15;} 50%{opacity:.9;} }
+
+  .sun{
+    position:fixed;
+    left:50%; bottom:-140px;
+    transform:translateX(-50%);
+    width:260px; height:260px;
+    border-radius:50%;
+    background: radial-gradient(circle, #ffe3af 0%, #f6b56a 55%, rgba(246,181,106,0) 75%);
+    opacity:0;
+    transition: opacity 2.5s ease, bottom 3s cubic-bezier(.2,.7,.3,1);
+    z-index:0;
+    pointer-events:none;
+  }
+  body.dawn .sun{ opacity:.75; bottom:-40px; }
+
+  /* floating hearts confetti */
+  .hearts{
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:3;
+    overflow:hidden;
+  }
+  .heart-p{
+    position:absolute;
+    top:-40px;
+    font-size:16px;
+    color:var(--rose);
+    opacity:.85;
+    animation: fall linear forwards;
+  }
+  @keyframes fall{
+    to{ transform: translateY(115vh) rotate(360deg); opacity:0; }
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:460px;
+    z-index:2;
+  }
+
+  .scene{ display:none; }
+  .scene.active{ display:block; }
+
+  /* ---------- envelope ---------- */
+  #scene-envelope{ display:flex; flex-direction:column; align-items:center; gap:22px; }
+  #scene-envelope.active{ display:flex; }
+
+  .envelope{
+    width:220px; height:150px;
+    cursor:pointer;
+    position:relative;
+    filter: drop-shadow(0 18px 30px rgba(0,0,0,0.45));
+    transition: transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .envelope:hover{ transform: translateY(-4px) scale(1.02); }
+  .envelope:active{ transform: translateY(0) scale(.98); }
+
+  .env-body{
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+    border-radius:4px;
+  }
+  .env-flap{
+    position:absolute; top:0; left:0; right:0; height:0;
+    border-left:110px solid transparent;
+    border-right:110px solid transparent;
+    border-top:82px solid #efd9cd;
+    transform-origin:top center;
+    transition: transform .5s cubic-bezier(.3,.9,.3,1);
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));
+  }
+  .envelope.open .env-flap{ transform: rotateX(180deg); }
+  .env-seal{
+    position:absolute; left:50%; top:44px; transform:translate(-50%,-50%);
+    width:38px; height:38px; border-radius:50%;
+    background: radial-gradient(circle at 32% 28%, #c05e73, var(--rose-dark) 72%);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.35), inset 0 1px 2px rgba(255,255,255,0.25);
+    display:flex; align-items:center; justify-content:center;
+    z-index:3;
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .envelope.open .env-seal{ opacity:0; transform:translate(-50%,-50%) scale(.6); }
+  .env-seal svg{ width:16px; height:16px; fill:#fbe4da; opacity:.95; }
+
+  .touch-label{
+    font-family:'Inter', sans-serif;
+    font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+    color:#f3dcc4; opacity:.9;
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:.55;} 50%{opacity:1;} }
+
+  /* ---------- shared card ---------- */
+  .card-wrap{ display:flex; justify-content:center; }
+  .card{
+    position:relative;
+    width:100%; max-width:400px;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+    border-radius:3px;
+    padding:44px 34px 36px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45), 0 2px 0 rgba(255,255,255,0.4) inset;
+    transform: rotate(var(--tilt, -0.6deg));
+    animation: settle .5s cubic-bezier(.2,.9,.25,1) both;
+  }
+  .card::before{
+    content:""; position:absolute; inset:10px;
+    border:1px solid var(--line); pointer-events:none;
+  }
+  .tape{
+    position:absolute; top:-14px; left:50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width:86px; height:26px;
+    background: rgba(245,230,222,0.55);
+    border:1px solid rgba(255,255,255,0.4);
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+  }
+  @keyframes settle{
+    from{ opacity:0; transform: translateY(14px) rotate(0deg) scale(.98); }
+    to{ opacity:1; transform: translateY(0) rotate(var(--tilt,-0.6deg)) scale(1); }
+  }
+
+  .eyebrow{
+    font-family:'Inter', sans-serif; font-size:10.5px;
+    letter-spacing:.28em; text-transform:uppercase;
+    color:var(--rose); text-align:center; margin:0 0 10px;
+  }
+  .headline{
+    font-style:italic; font-weight:600; font-size:29px; line-height:1.18;
+    text-align:center; color:var(--ink); margin:0 0 6px;
+  }
+  .sub{
+    font-family:'Inter', sans-serif; font-size:12px;
+    color:var(--ink-soft); text-align:center; font-style:italic; margin:0 0 22px;
+  }
+
+  /* ---------- letter scene ---------- */
+  .letter-text{
+    font-size:17px;
+    line-height:1.65;
+    color:var(--ink);
+    text-align:left;
+    margin:0 0 28px;
+  }
+  .letter-text p{ margin:0 0 14px; }
+  .letter-sign{
+    font-style:italic;
+    text-align:right;
+    color:var(--rose);
+    font-size:16px;
+    margin-bottom:26px;
+  }
+  .btn-continue{
+    width:100%;
+    background: var(--rose);
+    color:#fdf1ec;
+    font-family:'Inter', sans-serif;
+    font-size:13px; font-weight:600; letter-spacing:.03em;
+    padding:15px; border:none; border-radius:2px;
+    cursor:pointer;
+    box-shadow: 0 10px 20px rgba(126,47,64,0.3);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .btn-continue:hover{ transform: translateY(-1px); }
+  .btn-continue:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+
+  /* ---------- question scene ---------- */
+  .btn-row{
+    position:relative; display:flex; justify-content:center; gap:14px;
+    height:52px; margin-bottom:14px;
+  }
+  .btn{
+    font-family:'Inter', sans-serif; font-size:13px; font-weight:600;
+    letter-spacing:.02em; padding:13px 26px; border-radius:2px;
+    cursor:pointer; border:1px solid transparent;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .btn-yes{
+    background: var(--rose); color:#fdf1ec;
+    box-shadow: 0 8px 18px rgba(126,47,64,0.35);
+  }
+  .btn-yes:hover{ transform: translateY(-1px); box-shadow: 0 10px 22px rgba(126,47,64,0.45); }
+  .btn-no{
+    background: transparent; color: var(--ink-soft);
+    border-color: var(--line); position:relative; left:0; top:0;
+  }
+  .btn-no.dodging{ position:absolute; }
+
+  .taunt{
+    font-family:'Inter', sans-serif; font-style:italic; font-size:12.5px;
+    text-align:center; color:var(--ink-soft); min-height:18px;
+  }
+
+  /* ---------- confirmation scene ---------- */
+  .ring-stamp{
+    width:56px; height:56px; margin:0 auto 18px;
+    display:flex; align-items:center; justify-content:center;
+    transform: scale(0);
+    animation: stamp .55s cubic-bezier(.2,.9,.3,1.4) .1s forwards;
+  }
+  .ring-stamp svg{ width:48px; height:48px; }
+  @keyframes stamp{
+    0%{ transform: scale(2.2) rotate(-15deg); opacity:0; }
+    60%{ transform: scale(0.92) rotate(4deg); opacity:1; }
+    100%{ transform: scale(1) rotate(0deg); opacity:1; }
+  }
+  .confirm-detail{
+    text-align:center; font-family:'Cormorant Garamond', serif; font-size:17px;
+    line-height:1.6; color:var(--ink); margin:0 0 4px;
+  }
+  .confirm-note{
+    text-align:center; font-style:italic; font-size:15px;
+    color:var(--rose); margin-top:20px;
+  }
+  .confirm-sign{
+    text-align:center; font-family:'Inter', sans-serif; font-size:11.5px;
+    color:var(--ink-soft); margin-top:16px; letter-spacing:.05em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001s !important; transition-duration:.001s !important; }
+  }
+  @media (max-width:420px){
+    .card{ padding:36px 22px 28px; }
+    .headline{ font-size:25px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="sun"></div>
+<div class="hearts" id="hearts"></div>
+
+<div class="stage">
+
+  <!-- SCENE 1 : ENVELOPPE -->
+  <div id="scene-envelope" class="scene active">
+    <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Ouvrir la lettre">
+      <div class="env-body"></div>
+      <div class="env-flap"></div>
+      <div class="env-seal">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.2C.5 8.6 2.4 5 6 5c2 0 3.6 1.1 4.5 2.6C11.4 6.1 13 5 15 5c3.6 0 5.5 3.6 4 6.8-2.5 4.6-10 9.2-10 9.2z"/></svg>
+      </div>
+    </div>
+    <div class="touch-label" id="touch-label">Touche la lettre</div>
+  </div>
+
+  <!-- SCENE 2 : LA LETTRE -->
+  <div id="scene-letter" class="scene">
+    <div class="card-wrap">
+      <div class="card" style="--tilt:-0.5deg">
+        <div class="tape"></div>
+        <p class="eyebrow" id="l-eyebrow">Pour toi, Lorie</p>
+        <div class="letter-text" id="letter-body">
+          <p>Bonjour mon amour, j'espère que tu as bien dormi.</p>
+          <p>Avant même que tu poses un pied hors du lit, je voulais que tu saches à quel point tu rends ma vie plus belle, chaque jour, depuis qu'on est ensemble.</p>
+          <p>Alors ce matin, j'ai une question à te poser.</p>
+        </div>
+        <button class="btn-continue" id="btn-continue">Continuer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 3 : LA DEMANDE -->
+  <div id="scene-question" class="scene">
+    <div class="card-wrap">
+      <div class="card" style="--tilt:-0.8deg">
+        <div class="tape"></div>
+        <p class="eyebrow" id="q-eyebrow">Pour toi, Lorie</p>
+        <h1 class="headline" id="q-headline">Lorie, veux-tu<br>m'épouser&nbsp;?</h1>
+        <p class="sub">(dire non ne sert à rien, mais tu peux essayer)</p>
+        <div class="btn-row" id="btn-row">
+          <button class="btn btn-no" id="btn-no">Non</button>
+          <button class="btn btn-yes" id="btn-yes">Oui</button>
+        </div>
+        <p class="taunt" id="taunt"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 4 : CONFIRMATION -->
+  <div id="scene-confirm" class="scene">
+    <div class="card-wrap">
+      <div class="card" style="--tilt:-0.4deg">
+        <div class="tape"></div>
+        <div class="ring-stamp">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="40" r="16" fill="none" stroke="#c79a5b" stroke-width="4"/><path d="M32 8 L23 26 L41 26 Z" fill="#f3dcc4" stroke="#c79a5b" stroke-width="2"/><circle cx="32" cy="21" r="5" fill="#fbe4da" stroke="#c79a5b" stroke-width="2"/></svg>
+        </div>
+        <p class="eyebrow">Elle a dit oui</p>
+        <h1 class="headline" style="font-size:26px;">Pour toujours,<br>alors.</h1>
+        <p class="confirm-detail" id="c-body">À partir d'aujourd'hui, on construit tout le reste ensemble. Je t'aime, Lorie.</p>
+        <p class="confirm-note">Je t'aime plus que tout.</p>
+        <p class="confirm-sign" id="c-sign"></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  // ---------------- CONFIGURATION ----------------
+  // Modifie ces valeurs pour personnaliser la demande.
+  const CONFIG = {
+    name: "Lorie",
+    yourName: "", // ton prénom, affiché en signature finale (laisse vide pour ne rien afficher)
+    letterParagraphs: [
+      "Bonjour mon amour, j'espère que tu as bien dormi.",
+      "Avant même que tu poses un pied hors du lit, je voulais que tu saches à quel point tu rends ma vie plus belle, chaque jour, depuis qu'on est ensemble.",
+      "Alors ce matin, j'ai une question à te poser."
+    ],
+    question: "Lorie, veux-tu\nm'épouser ?",
+    confirmBody: "À partir d'aujourd'hui, on construit tout le reste ensemble. Je t'aime, Lorie.",
+    taunts: [
+      "Vraiment ?",
+      "Tu es sûre...",
+      "Essaie encore.",
+      "Ça ne marchera pas.",
+      "Je ne lâcherai rien.",
+      "Toujours pas."
+    ]
+  };
+
+  document.getElementById('l-eyebrow').textContent = "Pour toi, " + CONFIG.name;
+  document.getElementById('q-eyebrow').textContent = "Pour toi, " + CONFIG.name;
+  document.getElementById('q-headline').innerHTML = CONFIG.question.split("\n").join("<br>");
+  document.getElementById('c-body').textContent = CONFIG.confirmBody;
+  document.getElementById('c-sign').textContent = CONFIG.yourName ? "— " + CONFIG.yourName : "";
+
+  const letterBody = document.getElementById('letter-body');
+  letterBody.innerHTML = CONFIG.letterParagraphs.map(function(p){ return "<p>" + p + "</p>"; }).join("");
+
+  // ---------------- STARS ----------------
+  const starsEl = document.getElementById('stars');
+  for(let i=0;i<60;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random()*100 + '%';
+    s.style.top = Math.random()*70 + '%';
+    s.style.animationDelay = (Math.random()*3) + 's';
+    starsEl.appendChild(s);
+  }
+
+  // ---------------- SCENE SWITCHING ----------------
+  function showScene(id){
+    document.querySelectorAll('.scene').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+  }
+
+  // ---------------- SCENE 1: ENVELOPPE ----------------
+  const envelope = document.getElementById('envelope');
+  function openEnvelope(){
+    envelope.classList.add('open');
+    document.body.classList.add('dawn');
+    setTimeout(function(){ showScene('scene-letter'); }, 480);
+  }
+  envelope.addEventListener('click', openEnvelope);
+  envelope.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openEnvelope(); }
+  });
+
+  // ---------------- SCENE 2: LETTRE ----------------
+  document.getElementById('btn-continue').addEventListener('click', function(){
+    showScene('scene-question');
+  });
+
+  // ---------------- SCENE 3: LA DEMANDE ----------------
+  const btnRow = document.getElementById('btn-row');
+  const btnNo = document.getElementById('btn-no');
+  const btnYes = document.getElementById('btn-yes');
+  const taunt = document.getElementById('taunt');
+  let dodgeCount = 0;
+
+  function dodgeNo(){
+    dodgeCount++;
+    const rowRect = btnRow.getBoundingClientRect();
+    const btnRect = btnNo.getBoundingClientRect();
+    const maxX = Math.max(0, rowRect.width - btnRect.width);
+    const maxY = Math.max(0, rowRect.height - btnRect.height);
+
+    if(!btnNo.classList.contains('dodging')){ btnNo.classList.add('dodging'); }
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    btnNo.style.left = x + 'px';
+    btnNo.style.top = y + 'px';
+
+    const msgs = CONFIG.taunts;
+    taunt.textContent = msgs[Math.min(dodgeCount - 1, msgs.length - 1)];
+  }
+
+  btnNo.addEventListener('mouseenter', dodgeNo);
+  btnNo.addEventListener('click', function(e){ e.preventDefault(); dodgeNo(); });
+  btnNo.addEventListener('touchstart', function(e){ e.preventDefault(); dodgeNo(); }, {passive:false});
+
+  btnYes.addEventListener('click', function(){
+    showScene('scene-confirm');
+    launchHearts();
+  });
+
+  // ---------------- SCENE 4: CONFETTI DE COEURS ----------------
+  const heartsEl = document.getElementById('hearts');
+  function launchHearts(){
+    const symbols = ['♥','♡'];
+    for(let i=0;i<36;i++){
+      setTimeout(function(){
+        const h = document.createElement('div');
+        h.className = 'heart-p';
+        h.textContent = symbols[Math.random() < 0.7 ? 0 : 1];
+        h.style.left = Math.random()*100 + '%';
+        h.style.fontSize = (12 + Math.random()*14) + 'px';
+        h.style.animationDuration = (3.5 + Math.random()*2.5) + 's';
+        h.style.opacity = 0.6 + Math.random()*0.4;
+        heartsEl.appendChild(h);
+        setTimeout(function(){ h.remove(); }, 6500);
+      }, i * 90);
+    }
+  }
+
+})();
+</script>
+
+</body>
+</html>
