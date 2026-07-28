@@ -296,7 +296,9 @@
   }
 
   /* ================================================================
-     BASCULE DE LANGUE FRANÇAIS / ARABE
+     AJOUT — BASCULE DE LANGUE FRANÇAIS / ARABE (bloc ajouté uniquement)
+     Aucune règle ci-dessus n'est modifiée. Tout ce qui suit ne s'applique
+     que lorsque html[dir="rtl"] est actif (mode arabe).
      ================================================================ */
   .lang-switch{
     display:flex; align-items:center; gap:2px; border:1px solid var(--line); border-radius:2px;
@@ -373,8 +375,8 @@
   }
 
   /* ================================================================
-     Bouton WhatsApp flottant, formulaire de contact,
-     et fusion Témoignages + Avis clients
+     AJOUT — Bouton WhatsApp flottant, formulaire de contact,
+     et fusion Témoignages + Avis clients (bloc ajouté uniquement)
      ================================================================ */
   .wa-float{
     position:fixed; bottom:24px; inset-inline-end:24px; z-index:60;
@@ -433,7 +435,7 @@
   html[dir="rtl"] .form-field input, html[dir="rtl"] .form-field textarea{ font-family:'IBM Plex Sans Arabic', sans-serif; }
 
   /* ================================================================
-     AJOUT — Avant-propos
+     AJOUT — Avant-propos (bloc ajouté uniquement)
      ================================================================ */
   .avant-propos{ background:var(--paper); }
   .ap-wrap{ max-width:760px; margin:0 auto; }
@@ -471,7 +473,7 @@
     <a href="#services" data-i18n="nav-services">Services</a>
     <a href="#corridor" data-i18n="nav-corridor">Corridor</a>
     <a href="#secteurs" data-i18n="nav-secteurs">Secteurs</a>
-    <a href="#pdg" data-i18n="nav-pdg">Le PDG</a>
+    <a href="#pdg" data-i18n="nav-pdg">Le PDG de l'entreprise</a>
     <a href="#temoignages" data-i18n="nav-temoignages">Témoignages</a>
     <a href="#faq" data-i18n="nav-faq">FAQ</a>
     <a href="#contact" data-i18n="nav-contact">Contacts</a>
@@ -492,7 +494,7 @@
   <p class="hero-sub" data-i18n="hero-sub1">AMZET SARL organise le transit, le transport et le dédouanement de vos marchandises entre les Ports Autonomes de Douala et de Kribi et la République du Tchad jusqu'à votre entrepôt.</p>
   <p class="hero-sub" data-i18n="hero-sub2">La Fiabilité et la Sécurité de votre marchandise est notre Priorité...</p>
   <div class="hero-cta-row">
-    <a class="btn btn-primary" href="tel:+237691341211" data-i18n="hero-cta1">contactez-nous →</a>
+    <a class="btn btn-primary" href="tel:+237691341211" data-i18n="hero-cta1">Appeler l'agence →</a>
     <a class="btn btn-ghost" href="#services" data-i18n="hero-cta2">Voir nos services</a>
   </div>
 
@@ -518,8 +520,8 @@
     <div class="ap-ornament"><span class="ap-line"></span><span class="ap-dot"></span><span class="ap-line"></span></div>
     <div class="ap-eyebrow" data-i18n="ap-eyebrow">Avant-propos</div>
     <div class="ap-text">
-      <p data-i18n="ap-p1">Depuis sa création, AMZET SARL s'est fixé un seul objectif : faire de chaque expédition une opération maîtrisée, du premier document à la livraison finale. Le transit, le transport et le dédouanement ne tolèrent aucune approximation c'est pourquoi nous avons construit notre entreprise sur des principes simples mais non négociables : la rigueur dans l'exécution, la transparence envers nos clients, et le respect scrupuleux des délais annoncés.</p>
-      <p data-i18n="ap-p2">Les corridors qui relient les Ports Autonomes de Douala et de Kribi à N'Djamena sont exigeants. Ils traversent des frontières, des procédures changeantes, des imprévus logistiques. Y opérer avec constance demande une organisation solide et une équipe qui connaît le terrain aussi bien que les textes. C'est cette exigence que nous plaçons au cœur de chaque dossier, quelque soit sa taille.</p>
+      <p data-i18n="ap-p1">Depuis sa création, AMZET SARL s'est fixé un seul objectif : faire de chaque expédition une opération maîtrisée, du premier document à la livraison finale. Le transit, le transport et le dédouanement ne tolèrent aucune approximation — c'est pourquoi nous avons construit notre entreprise sur des principes simples mais non négociables : la rigueur dans l'exécution, la transparence envers nos clients, et le respect scrupuleux des délais annoncés.</p>
+      <p data-i18n="ap-p2">Les corridors qui relient les Ports Autonomes de Douala et de Kribi à N'Djamena sont exigeants. Ils traversent des frontières, des procédures changeantes, des imprévus logistiques. Y opérer avec constance demande une organisation solide et une équipe qui connaît le terrain aussi bien que les textes. C'est cette exigence que nous plaçons au cœur de chaque dossier, quelle que soit sa taille.</p>
       <p data-i18n="ap-p3">Nous croyons qu'une entreprise de transit et de logistique se juge non pas à ses promesses, mais à la régularité de ses résultats. C'est dans cet esprit que nous continuons de servir nos clients, jour après jour, avec la même discipline qu'au premier jour.</p>
     </div>
     <div class="ap-signature">
@@ -555,7 +557,7 @@
     <div class="service-row">
       <div class="service-num">04</div>
       <div class="service-name" data-i18n="svc4-name">Commerce général</div>
-      <div class="service-desc" data-i18n="svc4-desc">Achat, approvisionnement et négociation de marchandises pour le compte de nos clients, sur mesure.</div>
+      <div class="service-desc" data-i18n="svc4-desc">Achat, approvisionnement et négoce de marchandises pour le compte de nos clients, sur mesure.</div>
     </div>
     <div class="service-row">
       <div class="service-num">05</div>
@@ -579,8 +581,8 @@
     <div class="route-stops">
       <div class="stop">
         <div class="stop-dot"></div>
-        <div class="stop-label" data-i18n="stop1-label">Douala/Kribi</div>
-        <div class="stop-sub" data-i18n="stop1-sub">Port · réception</div>
+        <div class="stop-label" data-i18n="stop1-label">Douala / Kribi</div>
+        <div class="stop-sub" data-i18n="stop1-sub">Ports · réception</div>
       </div>
       <div class="stop">
         <div class="stop-dot"></div>
@@ -614,7 +616,7 @@
 <section class="sectors" id="secteurs">
   <div class="section-head">
     <div class="section-eyebrow" data-i18n="sectors-eyebrow">Marchandises transportées</div>
-    <h2 class="section-title" data-i18n="sectors-title">Quelque soit votre secteur.</h2>
+    <h2 class="section-title" data-i18n="sectors-title">Quel que soit votre secteur.</h2>
   </div>
   <div class="sector-grid">
     <div class="sector-card"><span class="tag" data-i18n="sec1-tag">Conteneurs</span><div class="name" data-i18n="sec1-name">Fret maritime</div></div>
@@ -836,7 +838,7 @@
 
 <script>
 /* ================================================================
-   AJOUT — Bascule de langue FR / AR
+   AJOUT — Bascule de langue FR / AR (script ajouté uniquement)
    ================================================================ */
 const I18N_AR = {
   "nav-services":"الخدمات",
@@ -884,7 +886,7 @@ const I18N_AR = {
   "corridor-eyebrow":"مجال عملنا",
   "corridor-title":"ممرا دوالا/كريبي – نجامينا، بين أيديكم.",
   "corridor-desc":"من الميناء العميق وحتى قلب تشاد، نتابع شحنتكم عند كل نقطة حدودية.",
-  "stop1-label":"دوالا","stop1-sub":"الميناء · الاستلام",
+  "stop1-label":"دوالا / كريبي","stop1-sub":"الموانئ · الاستلام",
   "stop2-label":"الحدود · توبورو","stop2-sub":"التخليص الجمركي",
   "stop3-label":"نجامينا","stop3-sub":"التسليم النهائي",
   "col1-h":"المقر الاجتماعي",
@@ -1005,7 +1007,7 @@ function setLang(lang){
 
 /* ================================================================
    AJOUT — Fusion Témoignages + Avis clients (étoiles + commentaires)
-   et formulaire de contact WhatsApp / e-mail
+   et formulaire de contact WhatsApp / e-mail (ajouté uniquement)
    ================================================================ */
 document.querySelectorAll('#avis-star-input .star').forEach(function(el){
   el.addEventListener('click', function(){
