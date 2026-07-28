@@ -20,25 +20,33 @@
   }
 
   *{box-sizing:border-box;}
-  html,body{height:100%;}
+  html{height:100%;}
   body{
     margin:0;
     min-height:100vh;
     display:flex;
-    align-items:center;
+    align-items:flex-start;
     justify-content:center;
     font-family:'Cormorant Garamond', serif;
     color:var(--ink);
-    overflow:hidden;
+    overflow-x:hidden;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
     position:relative;
     padding:24px;
     background: linear-gradient(180deg,#241726 0%, #3a2233 30%, #6a3548 55%, #b3603f 78%, #e8a35c 100%);
+    background-attachment:fixed;
     background-size: 100% 100%;
     transition: background 2.5s ease;
   }
   body.dawn{
     background: linear-gradient(180deg,#3a2233 0%, #6a3548 25%, #b3603f 55%, #e8a35c 78%, #f6cf8e 100%);
+    background-attachment:fixed;
   }
+  .stage{
+    margin:auto;
+  }
+
 
   /* twinkling stars, fade out as it "wakes up" */
   .stars{
@@ -456,7 +464,7 @@
   // Modifie ces valeurs pour personnaliser la demande.
   const CONFIG = {
     name: "Lorie",
-    yourName: "Ton Eric Kapet", // ton prénom, affiché en signature finale (laisse vide pour ne rien afficher)
+    yourName: "", // ton prénom, affiché en signature finale (laisse vide pour ne rien afficher)
 
     // Le premier mot de la lettre s'adapte à l'heure à laquelle elle ouvre le lien.
     // Laisse greetingMorning vide pour utiliser letterParagraphs[0] tel quel à toute heure.
@@ -543,6 +551,17 @@
     toggle.addEventListener('click', function(){
       if(musicPlaying){ audio.pause(); musicPlaying = false; }
       else { audio.play().then(function(){ musicPlaying = true; }).catch(function(){}); }
+    });
+
+    // Coupe la musique dès qu'elle quitte l'onglet / l'appli / ferme la page
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden && audio && !audio.paused){
+        audio.pause();
+        musicPlaying = false;
+      }
+    });
+    window.addEventListener('pagehide', function(){
+      if(audio){ audio.pause(); musicPlaying = false; }
     });
   }
 
